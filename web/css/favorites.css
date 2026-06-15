@@ -10,11 +10,7 @@ body::before {
     content: "";
     position: fixed;
     inset: 0;
-    background-image: url("../image/logo.jpg");
-    background-position: center;
-    background-size: cover;
-    filter: blur(2px) brightness(0.25);
-    transform: scale(1.05);
+    background: #0a0a0a;
     z-index: -2;
 }
 

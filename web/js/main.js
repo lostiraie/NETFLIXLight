@@ -3,6 +3,10 @@ let favorites = [];
 // Favoris
 async function loadFavorites() {
     const res = await fetch("/api/favorites");
+    if (res.status === 401) {
+        favorites = []; // pas connecté, tableau vide
+        return;
+    }
     favorites = await res.json();
 }
 
@@ -25,7 +29,7 @@ function createCard(film) {
     div.className = "film-card";
 
     div.innerHTML = `
-        <a href="details.html?id=${film.id}">
+        <a href="details.html?id=${film.id}&type=${film.type || 'movie'}">
             <img src="${film.poster}" alt="${film.titre}" loading="lazy">
             <div class="film-overlay"><span>${film.titre}</span></div>
         </a>
@@ -51,7 +55,7 @@ function createCard(film) {
         } else {
             btn.classList.add("active");
             btn.textContent = "★";
-            await addFavorite({ id: film.id, titre: film.titre, poster: film.poster });
+            await addFavorite({ id: film.id, titre: film.titre, poster: film.poster, type: film.type || 'movie' });
         }
     });
 
@@ -190,6 +194,12 @@ async function loadPage() {
         genreData.categories.forEach(cat => {
             container.appendChild(createSection(labels[cat.categorie] || cat.categorie, cat.films));
         });
+    }
+
+    // Charge les séries tendances
+    const seriesData = await fetch('/api/trending/series').then(r => r.json()).catch(() => ({}));
+    if (seriesData.films) {
+        container.appendChild(createSection("▶ Trending Series", seriesData.films));
     }
 
     // Barre de recherche

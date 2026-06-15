@@ -1,10 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetflixLight — Manage Profiles</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profiles.css">
 </head>
 <body>
-$END$
+
+<div class="profiles-page">
+
+    <div class="profiles-logo">Netflix<span>Light</span></div>
+
+    <h1 class="profiles-title">Manage <span>Profiles</span></h1>
+
+    <!-- Liste des profils -->
+    <div id="profiles-container" class="profiles-grid manage-mode"></div>
+
+    <!-- Formulaire création profil -->
+    <div class="create-profile-form">
+        <h2 class="create-title">New profile</h2>
+
+        <div class="avatar-picker" id="avatar-picker">
+            <span class="avatar-option active" data-avatar="🎬">🎬</span>
+            <span class="avatar-option" data-avatar="🎭">🎭</span>
+            <span class="avatar-option" data-avatar="🍿">🍿</span>
+            <span class="avatar-option" data-avatar="🎥">🎥</span>
+            <span class="avatar-option" data-avatar="⭐">⭐</span>
+            <span class="avatar-option" data-avatar="🦁">🦁</span>
+            <span class="avatar-option" data-avatar="🐼">🐼</span>
+            <span class="avatar-option" data-avatar="🦊">🦊</span>
+            <span class="avatar-option" data-avatar="🐸">🐸</span>
+            <span class="avatar-option" data-avatar="🤖">🤖</span>
+        </div>
+
+        <input type="text" id="profile-name" class="fav-search" placeholder="Profile name..." maxlength="20">
+        <button id="create-btn" class="btn-manage">Create profile</button>
+        <p id="create-message"></p>
+    </div>
+
+    <a href="profiles.html" class="btn-retour">← Back</a>
+
+</div>
+
+<script src="js/manage-profiles.js"></script>
+
 </body>
 </html>

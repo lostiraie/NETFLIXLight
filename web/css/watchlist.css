@@ -1,0 +1,9 @@
+@import url('favorites.css');
+
+.watchlist-date {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.4);
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+}

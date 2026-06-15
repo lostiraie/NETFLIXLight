@@ -25,8 +25,7 @@ if (registerForm) {
 
             // Si l'inscription est réussie, ca sauvegarde et redirige vers la page des films
             if (result.user) {
-                sessionStorage.setItem('user', JSON.stringify(result.user));
-                window.location.href = '/films';
+                window.location.href = '/profiles.html';
             }
         } catch (err) {
             document.getElementById('register-message').textContent = 'Sever error';
@@ -41,6 +40,7 @@ if (loginForm) {
 
         // Récupère les données du formulaire
         const data = {
+            pseudo:   loginForm.pseudo.value,
             email:    loginForm.email.value,
             password: loginForm.password.value
         };
@@ -57,8 +57,7 @@ if (loginForm) {
 
             // Connexion réussie ça sauvegarde et redirige vers la page des films
             if (result.user) {
-                sessionStorage.setItem('user', JSON.stringify(result.user));
-                window.location.href = '/films';
+                window.location.href = '/profiles.html';
             }
         } catch (err) {
             document.getElementById('login-message').textContent = 'Server error';
@@ -71,21 +70,55 @@ fetch('/auth/me')
     .then(res => res.json())
     .then(data => {
         if (data.user) {
-            // Affiche le bouton déconnexion
+            // Affiche déconnexion et profil
             const logoutBtn = document.getElementById('logout-btn');
             if (logoutBtn) logoutBtn.classList.remove('hidden');
 
-            // Affiche le pseudo
             const profileLink = document.getElementById('user-profile-link');
             if (profileLink) {
                 profileLink.classList.remove('hidden');
                 profileLink.textContent = data.user.pseudo;
-                const sepProfile = document.getElementById('sep-profile');
-                if (sepProfile) sepProfile.classList.remove('hidden');
-                const sepLogout = document.getElementById('sep-logout');
-                if (sepLogout) sepLogout.classList.remove('hidden');
             }
+
+            // Cache login et signup
+            const loginLink = document.querySelector('a[href="login.html"]');
+            const signupLink = document.querySelector('a[href="signup.html"]');
+            if (loginLink) loginLink.classList.add('hidden');
+            if (signupLink) signupLink.classList.add('hidden');
+
+            // Affiche les liens si connecté
+            const favLink = document.getElementById('favorites-link');
+            const histLink = document.getElementById('history-link');
+            const watchLink = document.getElementById('watchlist-link');
+            if (favLink) favLink.classList.remove('hidden');
+            if (histLink) histLink.classList.remove('hidden');
+            if (watchLink) watchLink.classList.remove('hidden');
+
+        } else {
+            // Cache profil et déconnexion si pas connecté
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) logoutBtn.classList.add('hidden');
+
+            const profileLink = document.getElementById('user-profile-link');
+            if (profileLink) profileLink.classList.add('hidden');
+
+            // Cache les liens si pas connecté
+            const favLink = document.getElementById('favorites-link');
+            const histLink = document.getElementById('history-link');
+            const watchLink = document.getElementById('watchlist-link');
+            if (favLink) favLink.classList.add('hidden');
+            if (histLink) histLink.classList.add('hidden');
+            if (watchLink) watchLink.classList.add('hidden');
         }
+
+        // Gère les séparateurs | selon ce qui est visible
+        document.querySelectorAll('.sep').forEach(sep => {
+            const prev = sep.previousElementSibling;
+            const next = sep.nextElementSibling;
+            const prevHidden = !prev || prev.classList.contains('hidden');
+            const nextHidden = !next || next.classList.contains('hidden');
+            sep.style.display = (prevHidden || nextHidden) ? 'none' : '';
+        });
     });
 
 // Déconnexion
@@ -94,7 +127,6 @@ if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
         fetch('/auth/logout', { method: 'POST' })
             .then(() => {
-                sessionStorage.removeItem('user');
                 window.location.href = '/films';
             });
     });

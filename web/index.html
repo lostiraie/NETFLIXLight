@@ -3,67 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetflixLight — Welcome</title>
+    <title>Netflix Light</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/films.css">
 </head>
 <body>
 
-<canvas id="particles"></canvas>
+<div class="topbar">
 
-<div class="welcome-logo"><a href="/" class="welcome-logo">Netflix<span>Light</span></a></div>
 
-<div class="welcome-page">
+    <a href="/" class="topbar-logo">Netflix<span>Light</span></a>
+    <input type="text" id="fav-search" class="topbar-search" placeholder="Search...">
+    <div id="auth-buttons">
 
-    <p class="welcome-badge">✦ &nbsp; Streaming Platform &nbsp; ✦</p>
-    <h1 class="title">✦ WELCOME ✦</h1>
-    <p class="welcome-subtitle">Discover the best films of the moment</p>
+        <!-- Bouton quand l'utilisateur est connecté -->
+        <a id="user-profile-link" href="profile.html" class="hidden">My profil</a>
+        <span class="sep">|</span>
+        <button id="logout-btn" class="btn-logout hidden">Disconnection</button>
+        <span class="sep">|</span>
 
-    <div class="welcome-stats">
-        <div class="welcome-stat">
-            <span class="stat-number" data-target="10000">0</span>
-            <span class="stat-label">Films</span>
-        </div>
-        <div class="stat-sep">·</div>
-        <div class="welcome-stat">
-            <span class="stat-number" data-target="4">0</span><span class="stat-unit">K+</span>
-            <span class="stat-label">Users</span>
-        </div>
-        <div class="stat-sep">·</div>
-        <div class="welcome-stat">
-            <span class="stat-number" data-target="100">0</span><span class="stat-unit">%</span>
-            <span class="stat-label">Free</span>
+        <!-- Toujours visible -->
+        <a href="login.html">Login</a>
+        <span class="sep">|</span>
+        <a href="signup.html">Sign up</a>
+        <span class="sep">|</span>
+        <a id="favorites-link" href="favorites.html" class="hidden">Favorites</a>
+        <span class="sep">|</span>
+        <a id="history-link" href="history.html" class="hidden">History</a>
+        <span class="sep">|</span>
+        <a id="watchlist-link" href="watchlist.html" class="hidden">Watchlist</a>
+
+    </div>
+</div>
+
+<!-- Affiche des films en fond -->
+<div id="hero-banner" class="hero-banner">
+
+    <!-- Image de fond du film -->
+    <div class="hero-backdrop" id="hero-backdrop"></div>
+
+    <!-- Flèches pour naviguer entre les films -->
+    <button class="hero-arrow hero-arrow-left" id="hero-prev">&#8592;</button>
+    <button class="hero-arrow hero-arrow-right" id="hero-next">&#8594;</button>
+
+    <!-- Infos du film -->
+    <div class="hero-content">
+        <p class="hero-tag">Trends</p>
+        <h1 class="hero-film-title" id="hero-film-title"></h1>
+        <p class="hero-synopsis" id="hero-synopsis"></p>
+        <div class="hero-meta" id="hero-meta"></div>
+
+        <!-- Boutons d'action -->
+        <div class="hero-btns">
+            <a class="hero-btn-play" id="hero-btn-play" href="#">▶ Watch the movie</a>
+            <button class="hero-btn-fav" id="hero-btn-fav">+ My Favorites</button>
         </div>
     </div>
 
-    <div class="welcome-features">
-        <div class="welcome-feature">
-            <span class="feature-icon">🎬</span>
-            <p>Films</p>
-        </div>
-        <div class="welcome-feature">
-            <span class="feature-icon">⭐</span>
-            <p>Top Rated</p>
-        </div>
-        <div class="welcome-feature">
-            <span class="feature-icon">🔥</span>
-            <p>Trends</p>
-        </div>
-        <div class="welcome-feature">
-            <span class="feature-icon">❤️</span>
-            <p>Favorites</p>
-        </div>
-    </div>
-
-    <div class="welcome-actions">
-        <a href="/films" class="welcome-btn">▶&nbsp;&nbsp;Discover Films</a>
-        <a href="/login" class="welcome-btn-ghost">Sign In</a>
-    </div>
-
-    <div class="scroll-indicator"><span></span></div>
+    <!-- Points de navigation -->
+    <div class="hero-dots" id="hero-dots"></div>
 
 </div>
 
-<script src="js/home.js"></script>
+<!-- Liste des films -->
+
+<!-- Rempli automatiquement par main.js -->
+<div id="films-container"></div>
+
+<!-- Charge le js -->
+<script src="js/main.js"></script>
+<script src="js/authentification.js"></script>
+
 </body>
 </html>
+

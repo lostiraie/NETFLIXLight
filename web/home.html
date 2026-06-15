@@ -3,89 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NetflixLight — Films</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/films.css">
+  <title>NetflixLight — Welcome</title>
+  <link rel="stylesheet" href="css/home.css">
 </head>
 <body>
 
-<!-- ── TOPBAR ── -->
-<nav class="topbar" id="topbar">
-  <a href="/" class="topbar-logo">Netflix<span>Light</span></a>
+<canvas id="particles"></canvas>
 
-  <div class="topbar-nav">
-    <a href="/films" class="topbar-link active">Films</a>
-    <a href="favorites.html" class="topbar-link">Favorites</a>
-  </div>
-
-  <div id="auth-buttons">
-    <a id="user-profile-link" href="profile.html" class="hidden topbar-link">
-      <span class="topbar-avatar" id="topbar-avatar">U</span>
-      My Profile
-    </a>
-    <span class="sep hidden-sep">|</span>
-    <button id="logout-btn" class="btn-logout hidden">Disconnect</button>
-    <span class="sep hidden-sep">|</span>
-    <a href="login.html" class="topbar-link">Login</a>
-    <span class="sep">|</span>
-    <a href="signup.html" class="topbar-link topbar-link-signup">Sign Up</a>
-    <span class="sep">|</span>
-    <a href="favorites.html" class="topbar-link">Favorites</a>
-  </div>
+<!-- Navbar -->
+<nav class="home-nav">
+  <div class="home-logo">Netflix<span>Light</span></div>
+  <a href="login.html" class="btn-signin">Sign In</a>
 </nav>
 
-<!-- ── HERO BANNER ── -->
-<div id="hero-banner" class="hero-banner">
-  <div class="hero-backdrop" id="hero-backdrop"></div>
-  <div class="hero-vignette"></div>
+<!-- Hero plein écran -->
+<div class="home-hero">
+  <div class="home-hero-bg" id="home-hero-bg"></div>
+  <div class="home-hero-overlay"></div>
 
-  <button class="hero-arrow hero-arrow-left" id="hero-prev">&#8592;</button>
-  <button class="hero-arrow hero-arrow-right" id="hero-next">&#8594;</button>
+  <div class="home-hero-content">
 
-  <div class="hero-content" id="hero-content">
-    <p class="hero-tag" id="hero-tag">
-      <span class="hero-tag-bar"></span>
-      Trends
+    <p class="home-badge">✦ Streaming Platform ✦</p>
+
+    <h1 class="home-title">
+      Unlimited <span>Films</span><br>& Series
+    </h1>
+
+    <p class="home-subtitle">
+      Discover the best films and series of the moment.
     </p>
-    <h1 class="hero-film-title" id="hero-film-title"></h1>
-    <p class="hero-synopsis" id="hero-synopsis"></p>
-    <div class="hero-meta" id="hero-meta"></div>
-    <div class="hero-btns">
-      <a class="hero-btn-play" id="hero-btn-play" href="#">
-        <span class="btn-play-icon">▶</span>
-        Watch the film
-      </a>
-      <button class="hero-btn-fav" id="hero-btn-fav">
-        <span id="hero-fav-icon">＋</span>
-        My List
-      </button>
+
+    <!-- Features inline -->
+    <div class="home-features-inline">
+      <div class="home-feature-inline">
+        <span>🎬</span>
+        <p>Thousands of Films</p>
+      </div>
+      <div class="home-divider"></div>
+      <div class="home-feature-inline">
+        <span>📺</span>
+        <p>Series & Shows</p>
+      </div>
+      <div class="home-divider"></div>
+      <div class="home-feature-inline">
+        <span>⭐</span>
+        <p>Top Rated</p>
+      </div>
+      <div class="home-divider"></div>
+      <div class="home-feature-inline">
+        <span>🔖</span>
+        <p>Watchlist</p>
+      </div>
     </div>
+
   </div>
 
-  <div class="hero-dots" id="hero-dots"></div>
+  <!-- Indicateur de film en cours -->
+  <div class="film-indicator" id="film-indicator"></div>
 
-  <div class="hero-progress">
-    <div class="hero-progress-bar" id="hero-progress-bar"></div>
-  </div>
 </div>
 
-<!-- ── SEARCH BAR ── -->
-<div class="search-bar-section">
-  <div class="search-wrapper">
-    <span class="search-icon">⌕</span>
-    <input type="text" id="fav-search" class="fav-search" placeholder="Search for a film…">
-    <button class="search-clear hidden" id="search-clear">✕</button>
-  </div>
-</div>
-
-<!-- ── FILMS ── -->
-<div id="films-container"></div>
-
-<!-- ── BACK TO TOP ── -->
-<button class="back-to-top hidden" id="back-to-top">↑</button>
-
-<script src="js/main.js"></script>
-<script src="js/authentification.js"></script>
+<script src="js/home.js"></script>
 
 </body>
 </html>

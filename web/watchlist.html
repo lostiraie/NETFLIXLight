@@ -1,10 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetflixLight — Watchlist</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/watchlist.css">
 </head>
 <body>
-$END$
+
+<div class="topbar">
+    <div class="topbar-logo">Netflix<span>Light</span></div>
+    <a href="index.html" class="btn-retour">← Back</a>
+</div>
+
+<div class="fav-hero">
+    <h1 class="fav-title">My <span>Watchlist</span></h1>
+    <p id="watchlist-count">0 film</p>
+    <input type="text" id="watchlist-search" class="fav-search" placeholder="Search in watchlist...">
+</div>
+
+<!-- Rempli automatiquement par watchlist.js -->
+<div id="watchlist-container" class="fav-grid"></div>
+
+<!-- Affiché si vide -->
+<div id="watchlist-empty" class="fav-empty hidden">
+    <p>No films in your watchlist.</p>
+    <a href="index.html">Browse the films</a>
+</div>
+
+<script src="js/watchlist.js"></script>
+
 </body>
 </html>

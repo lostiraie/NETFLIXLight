@@ -1,10 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetflixLight — Who's watching?</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profiles.css">
 </head>
 <body>
-$END$
+
+<div class="profiles-page">
+
+    <div class="profiles-logo">Netflix<span>Light</span></div>
+
+    <h1 class="profiles-title">Who's watching?</h1>
+
+    <!-- Liste des profils -->
+    <!-- Rempli automatiquement par profiles.js -->
+    <div id="profiles-container" class="profiles-grid"></div>
+
+    <!-- Bouton gérer les profils -->
+    <button id="manage-btn" class="btn-manage">Manage profiles</button>
+
+</div>
+
+<script src="js/profiles.js"></script>
+
 </body>
 </html>

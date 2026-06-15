@@ -1,10 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetflixLight — History</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/history.css">
 </head>
 <body>
-$END$
+
+<div class="topbar">
+    <div class="topbar-logo">Netflix<span>Light</span></div>
+    <a href="index.html" class="btn-retour">← Back</a>
+</div>
+
+<div class="fav-hero">
+    <h1 class="fav-title">My <span>History</span></h1>
+    <p id="history-count">0 film</p>
+    <input type="text" id="history-search" class="fav-search" placeholder="Search in history...">
+</div>
+
+<!-- Bouton vider l'historique -->
+<div class="history-actions">
+    <button id="clear-history-btn">🗑 Clear history</button>
+</div>
+
+<!-- Rempli automatiquement par history.js -->
+<div id="history-container" class="fav-grid"></div>
+
+<!-- Affiché si vide -->
+<div id="history-empty" class="fav-empty hidden">
+    <p>No history yet.</p>
+    <a href="index.html">Browse the films</a>
+</div>
+
+<script src="js/history.js"></script>
+
 </body>
 </html>

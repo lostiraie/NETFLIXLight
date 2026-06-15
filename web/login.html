@@ -2,33 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Connection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NetflixLight — Login</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
 
-<!-- ─Page de connexion -->
-<div class="auth-page">
+<div class="auth-bg">
+  <div class="auth-bg-overlay"></div>
+</div>
 
-  <div class="auth-logo">Netflix<span>Light</span></div>
+<div class="auth-container">
 
-  <!-- Formulaire de connexion -->
-  <h2>Connection</h2>
-  <form id="login-form">
-    <input type="email"    name="email"    placeholder="e-mail"    required>
-    <input type="password" name="password" placeholder="password"  required>
-    <button type="submit">login</button>
-  </form>
+  <!-- Logo -->
+  <a href="/" class="auth-logo">Netflix<span>Light</span></a>
 
-  <!-- Message de succès ou d'erreur -->
-  <p id="login-message"></p>
+  <!-- Card -->
+  <div class="auth-card">
+    <h1 class="auth-title">Sign In</h1>
+    <p class="auth-subtitle">Welcome back</p>
 
-  <!-- Lien vers l'inscription -->
-  <p>Not registered yet ?  <a href="signup.html">signup</a></p>
+    <form id="login-form" class="auth-form">
+      <div class="auth-field">
+        <input type="text" name="pseudo" id="pseudo" placeholder=" " required>
+        <label for="pseudo">Username</label>
+      </div>
+      <div class="auth-field">
+        <input type="email" name="email" id="email" placeholder=" " required>
+        <label for="email">Email address</label>
+      </div>
+      <div class="auth-field">
+        <input type="password" name="password" id="password" placeholder=" " required>
+        <label for="password">Password</label>
+      </div>
+      <button type="submit" class="auth-btn">Sign In</button>
+    </form>
+
+    <p id="login-message" class="auth-message"></p>
+
+    <div class="auth-divider">
+      <span></span>
+      <p>New to NetflixLight?</p>
+      <span></span>
+    </div>
+
+    <a href="signup.html" class="auth-btn-secondary">Create an account</a>
+  </div>
 
 </div>
 
-<!-- Charge le js -->
 <script src="js/authentification.js"></script>
 
 </body>

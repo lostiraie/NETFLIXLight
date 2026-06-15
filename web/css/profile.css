@@ -1,54 +1,279 @@
 .profile-page {
-    max-width: 700px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 100px 2rem 4rem;
+    padding: 90px 2rem 4rem;
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 3rem;
 }
 
+/* ── Header ── */
 .profile-header {
     display: flex;
     align-items: center;
-    gap: 2rem;
-    padding: 2rem;
+    gap: 2.5rem;
+    padding: 2.5rem;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(229,9,20,0.15);
-    border-radius: 6px;
+    border-radius: 8px;
     backdrop-filter: blur(10px);
+    animation: fadeDown 0.7s ease both;
+}
+
+.profile-avatar-big {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    background: rgba(229,9,20,0.1);
+    border: 2px solid rgba(229,9,20,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    flex-shrink: 0;
 }
 
 .profile-info h1 {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     letter-spacing: 3px;
     color: var(--text);
     margin-bottom: 0.4rem;
     animation: none;
+    text-transform: uppercase;
 }
 
 .profile-info h1::after { display: none; }
 
 .profile-info p {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     letter-spacing: 2px;
     color: var(--text-muted);
-    margin-bottom: 0.3rem;
 }
 
+.profile-member {
+    margin-top: 0.4rem;
+    color: var(--red) !important;
+    font-size: 0.65rem !important;
+    letter-spacing: 3px !important;
+    text-transform: uppercase;
+}
+
+/* ── Stats ── */
 .profile-stats {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
+    animation: fadeUp 0.8s ease both;
 }
 
 .stat-card {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.4rem;
-    padding: 1.5rem;
+    gap: 0.5rem;
+    padding: 1.8rem 1rem;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(229,9,20,0.15);
     border-radius: 6px;
     backdrop-filter: blur(10px);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    cursor: pointer;
+}
+
+.stat-card:hover {
+    border-color: var(--red);
+    transform: translateY(-4px);
+    background: rgba(229,9,20,0.06);
+}
+
+.stat-icon { font-size: 1.5rem; }
+
+.stat-number {
+    font-family: 'Century Gothic', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--red);
+    letter-spacing: 2px;
+}
+
+.stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+/* ── Sections ── */
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    animation: fadeUp 0.9s ease both;
+}
+
+.profile-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.profile-section-title {
+    font-family: 'Century Gothic', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-section-title::before {
+    content: "";
+    display: block;
+    width: 3px;
+    height: 14px;
+    background: var(--red);
+    border-radius: 2px;
+}
+
+.profile-section-link {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--red);
+    text-decoration: none;
+    text-transform: uppercase;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.profile-section-link:hover { opacity: 1; color: var(--red); }
+
+/* ── Mini cards ── */
+.profile-films-row {
+    display: flex;
+    gap: 0.8rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+}
+
+.profile-films-row::-webkit-scrollbar { display: none; }
+
+.profile-mini-card {
+    flex-shrink: 0;
+    width: 120px;
+    height: 180px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.profile-mini-card:hover {
+    transform: scale(1.06) translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.8), 0 0 0 1px var(--red);
+}
+
+.profile-mini-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.profile-mini-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: flex-end;
+    padding: 0.6rem;
+}
+
+.profile-mini-card:hover .profile-mini-overlay { opacity: 1; }
+
+.profile-mini-overlay p {
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1.3;
+}
+
+/* ── Reviews ── */
+.profile-reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.profile-review-card {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(229,9,20,0.1);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.profile-review-card:hover {
+    border-color: var(--red);
+    background: rgba(229,9,20,0.05);
+}
+
+.profile-review-poster {
+    width: 50px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.profile-review-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.profile-review-title {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text);
+    font-weight: 700;
+}
+
+.profile-review-stars { color: var(--red); font-size: 0.9rem; }
+
+.profile-review-comment {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
+.profile-review-date {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 2px;
+}
+
+.profile-empty {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+}
+
+@media (max-width: 768px) {
+    .profile-stats { grid-template-columns: repeat(2, 1fr); }
+    .profile-header { flex-direction: column; text-align: center; }
 }

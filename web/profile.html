@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>My Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NetflixLight — My Profile</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/profile.css">
 </head>
@@ -10,30 +11,73 @@
 
 <div class="topbar">
   <div class="topbar-logo">Netflix<span>Light</span></div>
-  <a href="index.html">← Back</a>
+  <a href="index.html" class="btn-retour">← Back</a>
 </div>
 
 <div class="profile-page">
 
-  <!-- Infos -->
+  <!-- Header profil -->
   <div class="profile-header">
+    <div class="profile-avatar-big" id="profile-avatar">🎬</div>
     <div class="profile-info">
       <h1 id="profile-pseudo">Pseudo</h1>
       <p id="profile-email">email@example.com</p>
+      <p class="profile-member">Member of NetflixLight</p>
     </div>
   </div>
 
-  <!-- Nombres de films en favoris -->
+  <!-- Stats -->
   <div class="profile-stats">
+    <a href="favorites.html" class="stat-card">
+      <span class="stat-icon">❤️</span>
+      <span id="stat-favoris" class="stat-number">0</span>
+      <span class="stat-label">Favorites</span>
+    </a>
+    <a href="watchlist.html" class="stat-card">
+      <span class="stat-icon">🔔</span>
+      <span id="stat-watchlist" class="stat-number">0</span>
+      <span class="stat-label">Watchlist</span>
+    </a>
+    <a href="history.html" class="stat-card">
+      <span class="stat-icon">🕐</span>
+      <span id="stat-history" class="stat-number">0</span>
+      <span class="stat-label">Watched</span>
+    </a>
     <div class="stat-card">
-      <span id="stat-favoris">0</span>
-      <span>Favorites</span>
+      <span class="stat-icon">⭐</span>
+      <span id="stat-reviews" class="stat-number">0</span>
+      <span class="stat-label">Reviews</span>
     </div>
+  </div>
+
+  <!-- Derniers films vus -->
+  <div class="profile-section">
+    <div class="profile-section-header">
+      <h2 class="profile-section-title">▶ Recently Watched</h2>
+      <a href="history.html" class="profile-section-link">See all →</a>
+    </div>
+    <div id="recent-history" class="profile-films-row"></div>
+  </div>
+
+  <!-- Dernières reviews -->
+  <div class="profile-section">
+    <div class="profile-section-header">
+      <h2 class="profile-section-title">▶ My Reviews</h2>
+    </div>
+    <div id="recent-reviews" class="profile-reviews-list"></div>
+  </div>
+
+  <!-- Favoris récents -->
+  <div class="profile-section">
+    <div class="profile-section-header">
+      <h2 class="profile-section-title">▶ My Favorites</h2>
+      <a href="favorites.html" class="profile-section-link">See all →</a>
+    </div>
+    <div id="recent-favorites" class="profile-films-row"></div>
   </div>
 
 </div>
 
-<!-- Charge le js -->
 <script src="js/profile.js"></script>
 
 </body>

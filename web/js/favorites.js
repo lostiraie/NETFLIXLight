@@ -6,8 +6,15 @@ function loadFavorites() {
     container.innerHTML = "";
 
     fetch("/api/favorites")
-        .then(res => res.json())
+        .then(res => {
+            if (res.status === 401) {
+                window.location.href = 'login.html';
+                return null;
+            }
+            return res.json();
+        })
         .then(films => {
+            if (!films) return;
 
             // Met à jour le compteur de films
             document.getElementById('fav-count').textContent =
@@ -34,7 +41,7 @@ function loadFavorites() {
                     <div class="fav-overlay">
                         <p class="fav-movie-title">${film.titre}</p>
                         <div class="fav-overlay-btns">
-                            <a href="details.html?id=${film.id}">Details</a>
+                            <a href="details.html?id=${film.id}&type=${film.type || 'movie'}">Details</a>
                             <button class="fav-remove">✕ Delete </button>
                         </div>
                     </div>
