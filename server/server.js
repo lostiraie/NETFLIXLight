@@ -24,11 +24,18 @@ app.use(session({
 // Pages
 app.get('/', (req, res) => res.sendFile(`${WEB}/home.html`)); // Page home
 app.get('/films', (req, res) => res.sendFile(`${WEB}/index.html`)); // Page des films
+app.get('/profiles', (req, res) => res.sendFile(`${WEB}/profiles.html`));
 
 // Routes
 app.use('/api', require('./routes/movies.js')); // Routes films
-app.use('/auth', require('./routes/authentification.js')); // Routes connexion/inscription
+app.use('/api/watchlist', require('./routes/watchlist.js'));
+app.use('/api/history', require('./routes/history.js'));
+app.use('/api/reviews', require('./routes/reviews.js'));
+app.use('/api/profiles', require('./routes/profiles.js'));
 app.use('/api/favorites', require('./routes/favorites.js')); // Routes favoris
+
+// AUTHENTIFICATION
+app.use('/auth', require('./routes/authentification.js')); // Routes connexion/inscription
 
 // Permet de servir les fichiers (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, '../web')));

@@ -1,32 +1,29 @@
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-
-// Clé API pour accéder à la base de données de films TMDB
-const TMDB_API_KEY = process.env.TMDB_API_KEY;
+const { API_KEY, BASE_URL } = require('../stockage/tmdb.js');
 
 // Films tendances
 async function getTrending(req, res) {
     try {
-        // Récupère 5 pages de films tendance (100 films au total) (1 pages = 20 films)
-        const pages = [1, 2, 3, 4, 5];
+        const pages = [1, 2, 3, 4, 5, 6, 7];
 
         const reponses = await Promise.all(
             pages.map(page =>
-                fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${TMDB_API_KEY}&page=${page}`)
+                fetch(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}&page=${page}`)
                     .then(r => r.json())
             )
         );
 
-        // Formate les données pour garder que l'essentiel
         const films = reponses
             .flatMap(data => data.results)
-            .filter(film => film.poster_path) // ignore les films sans affiche
+            .filter(film => film.poster_path)
             .map(film => ({
                 id: film.id,
-                titre: film.title,
+                titre: film.title || film.name, // séries ont name pas title
                 poster: `https://image.tmdb.org/t/p/w500${film.poster_path}`,
-                date_sortie: film.release_date,
-                note: film.vote_average
-            }));
+                date_sortie: film.release_date || film.first_air_date,
+                note: film.vote_average,
+                type: film.media_type // ← TMDB retourne 'movie' ou 'tv' ici
+            }))
 
         res.json({ films });
     } catch (err) {
@@ -38,14 +35,16 @@ async function getTrending(req, res) {
 async function getMovieDetails(req, res) {
     const id = req.params.id;
     try {
-        // Récupère les infos du film
-        const reponse = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${TMDB_API_KEY}&language=fr-FR`);
+        const reponse = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=fr-FR`);
         const film = await reponse.json();
 
-        // Récupèrer les 5 premiers acteurs du film
-        const creditsReponse = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${TMDB_API_KEY}`);
+        const creditsReponse = await fetch(`${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}`);
         const credits = await creditsReponse.json();
-        const acteurs = credits.cast.slice(0, 10).map(a => a.name);
+        const acteurs = (credits.cast || []).slice(0, 10).map(a => ({
+            nom: a.name,
+            photo: a.profile_path ? `https://image.tmdb.org/t/p/w185${a.profile_path}` : null,
+            personnage: a.character
+        }));
 
         res.json({
             id: film.id,
@@ -62,10 +61,8 @@ async function getMovieDetails(req, res) {
     }
 }
 
-// Film genre
+// Films par genre
 async function getByGenre(req, res) {
-
-    // Liste des genres avec leur ID TMDB
     const genres = {
         action: 28,
         comedy: 35,
@@ -75,10 +72,9 @@ async function getByGenre(req, res) {
     };
 
     try {
-        // Récupère 20 films pour chaque genre
         const resultats = await Promise.all(
             Object.entries(genres).map(([nom, id]) =>
-                fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&with_genres=${id}&sort_by=popularity.desc&language=fr-FR`)
+                fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${id}&sort_by=popularity.desc&language=fr-FR`)
                     .then(r => r.json())
                     .then(data => ({
                         categorie: nom,
@@ -102,10 +98,10 @@ async function getByGenre(req, res) {
     }
 }
 
-// Film les mieux notés
+// Films les mieux notés
 async function getTopRated(req, res) {
     try {
-        const reponse = await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${TMDB_API_KEY}&language=fr-FR`);
+        const reponse = await fetch(`${BASE_URL}/movie/top_rated?api_key=${API_KEY}&language=fr-FR`);
         const data = await reponse.json();
 
         const films = data.results
@@ -129,14 +125,12 @@ async function getTopRated(req, res) {
 async function getMovieTrailer(req, res) {
     const id = req.params.id;
     try {
-        // Cherche un trailer en français
-        const reponse = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${TMDB_API_KEY}&language=fr-FR`);
+        const reponse = await fetch(`${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}&language=fr-FR`);
         const data = await reponse.json();
         let trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
 
-        // Si pas de trailer en français, cherche en anglais
         if (!trailer) {
-            const reponseEn = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${TMDB_API_KEY}&language=en-US`);
+            const reponseEn = await fetch(`${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}&language=en-US`);
             const dataEn = await reponseEn.json();
             trailer = dataEn.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
         }
@@ -147,4 +141,109 @@ async function getMovieTrailer(req, res) {
     }
 }
 
-module.exports = { getTrending, getMovieDetails, getByGenre, getTopRated, getMovieTrailer };
+// Séries tendances
+async function getTrendingSeries(req, res) {
+    try {
+        const reponse = await fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&language=fr-FR`);
+        const data = await reponse.json();
+
+        const series = data.results
+            .filter(s => s.poster_path)
+            .slice(0, 20)
+            .map(s => ({
+                id: s.id,
+                titre: s.name,
+                poster: `https://image.tmdb.org/t/p/w500${s.poster_path}`,
+                date_sortie: s.first_air_date,
+                note: s.vote_average,
+                type: 'serie'
+            }));
+
+        res.json({ films: series });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
+// Détails d'une série
+async function getSeriesDetails(req, res) {
+    const id = req.params.id;
+    try {
+        const reponse = await fetch(`${BASE_URL}/tv/${id}?api_key=${API_KEY}&language=fr-FR`);
+        const serie = await reponse.json();
+
+        const creditsReponse = await fetch(`${BASE_URL}/tv/${id}/credits?api_key=${API_KEY}`);
+        const credits = await creditsReponse.json();
+        const acteurs = (credits.cast || []).slice(0, 10).map(a => ({
+            nom: a.name,
+            photo: a.profile_path ? `https://image.tmdb.org/t/p/w185${a.profile_path}` : null,
+            personnage: a.character
+        }));
+
+        res.json({
+            id: serie.id,
+            titre: serie.name,
+            synopsis: serie.overview,
+            poster: serie.poster_path ? `https://image.tmdb.org/t/p/w500${serie.poster_path}` : null,
+            date_sortie: serie.first_air_date,
+            note: serie.vote_average,
+            genres: (serie.genres || []).map(g => g.name),
+            acteurs: acteurs,
+            saisons: serie.number_of_seasons,
+            episodes: serie.number_of_episodes,
+            type: 'serie'
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
+// Trailer d'une série
+async function getSeriesTrailer(req, res) {
+    const id = req.params.id;
+    try {
+        const reponse = await fetch(`${BASE_URL}/tv/${id}/videos?api_key=${API_KEY}&language=fr-FR`);
+        const data = await reponse.json();
+        let trailer = data.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+
+        if (!trailer) {
+            const reponseEn = await fetch(`${BASE_URL}/tv/${id}/videos?api_key=${API_KEY}&language=en-US`);
+            const dataEn = await reponseEn.json();
+            trailer = dataEn.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+        }
+
+        res.json({ trailerKey: trailer ? trailer.key : null });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
+// Films similaires
+async function getSimilarMovies(req, res) {
+    const id = req.params.id;
+    const type = req.params.type; // 'movie' ou 'serie'
+    const endpoint = type === 'serie' ? 'tv' : 'movie';
+
+    try {
+        const reponse = await fetch(`${BASE_URL}/${endpoint}/${id}/similar?api_key=${API_KEY}&language=fr-FR`);
+        const data = await reponse.json();
+
+        const films = (data.results || [])
+            .filter(f => f.poster_path)
+            .slice(0, 10)
+            .map(f => ({
+                id: f.id,
+                titre: f.title || f.name,
+                poster: `https://image.tmdb.org/t/p/w500${f.poster_path}`,
+                date_sortie: f.release_date || f.first_air_date,
+                note: f.vote_average,
+                type: type
+            }));
+
+        res.json({ films });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
+module.exports = { getTrending, getMovieDetails, getByGenre, getTopRated, getMovieTrailer, getTrendingSeries, getSeriesDetails, getSeriesTrailer, getSimilarMovies };

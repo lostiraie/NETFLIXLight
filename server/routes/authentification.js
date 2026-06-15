@@ -8,12 +8,14 @@ router.post('/register', registerUser);      // Inscription
 router.post('/login', loginUser);            // Connexion
 router.post('/logout', logoutUser);          // Déconnexion
 
-// Vérifie si l'utilisateur est connecté
 router.get('/me', (req, res) => {
     if (req.session.user) {
-        res.json({ user: req.session.user }); // Retourne l'utilisateur
+        res.json({
+            user: req.session.user,
+            profile: req.session.profile || null
+        });
     } else {
-        res.json({ user: null }); // Personne de connecté
+        res.json({ user: null, profile: null });
     }
 });
 

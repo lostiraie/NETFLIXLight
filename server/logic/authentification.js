@@ -1,6 +1,7 @@
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const { readJSON, writeJSON } = require('../services/storage.js');
+const { randomUUID } = require('crypto');
 
 // Fichier qui stocke les utilisateurs
 const usersFile = path.join(__dirname, '../stockage/users.json');
@@ -24,6 +25,7 @@ async function registerUser(req, res) {
 
     // Ajoute le nouvel utilisateur
     users.push({
+        id: randomUUID(),
         email,
         pseudo,
         password: hashedPassword,
@@ -32,9 +34,10 @@ async function registerUser(req, res) {
     writeJSON(usersFile, users);
 
     // Démarre la session
-    req.session.user = { email, pseudo, };
-    res.json({ message: "Successful signup", user: { email, pseudo, } });
+    req.session.user = { id: users[users.length - 1].id, email, pseudo };
+    res.json({ message: "Successful signup", user: { email, pseudo } });
 }
+
 
 // Connexion
 async function loginUser(req, res) {
@@ -42,24 +45,24 @@ async function loginUser(req, res) {
     const users = readJSON(usersFile);
 
     // Cherche l'utilisateur par email
-    const user = users.find(u => u.email === email);
-    if (!user)
-        return res.status(400).json({ error: "User not found" });
+    const user = users.find(u => u.email === email || u.pseudo === pseudo);
+    const isValid = user && await bcrypt.compare(password, user.password);
 
-    // Vérifie le mot de passe
-    const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid)
-        return res.status(400).json({ error: "Incorrect password" });
+    if (!user || !isValid)
+        return res.status(400).json({ error: "Incorrect email or password" });
 
     // Démarre la session
-    req.session.user = { email, pseudo: user.pseudo, };
-    res.json({ message: "Login successful", user: { email, pseudo: user.pseudo, } });
+    req.session.user = { id: user.id, email: user.email, pseudo: user.pseudo };
+    res.json({ message: "Login successful", user: { email: user.email, pseudo: user.pseudo } });
 }
 
 // Déconnexion
+// APRÈS
 function logoutUser(req, res) {
-    req.session.destroy(); // Supprime la session
-    res.json({ success: true });
+    req.session.destroy(err => {
+        if (err) return res.status(500).json({ error: 'Logout error' });
+        res.json({ success: true });
+    });
 }
 
 module.exports = { registerUser, loginUser, logoutUser, };

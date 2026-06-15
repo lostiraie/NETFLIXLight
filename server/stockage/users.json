@@ -1,2 +1,33 @@
 [
+  {
+    "id": "8773891a-9f04-4b03-b948-fa94a152b3fb",
+    "email": "ORLANDO.COGO.O@GMAIL.COM",
+    "pseudo": "lostiraie",
+    "password": "$2b$10$vQpvDqDJkVVd3gHUboNckOExLKFkuNVICXanK7qqd2S77sCynX/4C",
+    "profiles": [
+      {
+        "id": "02eb81c9-8d88-4dd2-9a78-1f35fd9bfb69",
+        "nom": "orlando",
+        "avatar": "🎥"
+      },
+      {
+        "id": "da65d08d-ce0e-4108-ac85-1d409e221b25",
+        "nom": "lostiraie",
+        "avatar": "🐼"
+      }
+    ]
+  },
+  {
+    "id": "3897d256-f473-4151-9bfe-dcc276765688",
+    "email": "orlando.cogo.o@gmail.com",
+    "pseudo": "lostiraie",
+    "password": "$2b$10$cQJlCS0ssuMFzq6En7sqLOPFUG7swHWfBausQSlMDsZcgwfNSWPqq",
+    "profiles": [
+      {
+        "id": "1d7b66dc-bbb8-4cfd-8f43-a159098225cb",
+        "nom": "orlando",
+        "avatar": "🎭"
+      }
+    ]
+  }
 ]

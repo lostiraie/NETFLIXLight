@@ -1,41 +1,62 @@
-const fs = require("fs");
-const path = require("path");
+const { readJSON, writeJSON } = require('../services/storage.js'); // utilise storage
+const path = require('path');
 
-// Fichier qui stock les favoris
-const filePath = path.join(__dirname, "../stockage/favorites.json");
+const filePath = path.join(__dirname, '../stockage/favorites.json');
 
-// Ajoute un favoris
+// Ajoute un favori
 exports.addFavorite = (req, res) => {
     const film = req.body;
-    const favorites = JSON.parse(fs.readFileSync(filePath));
+    const profileId = req.session.profile.id;
+    const favorites = readJSON(filePath);
 
-    // Vérifie que le film n'est pas déjà dans les favoris
-    const dejaPresent = favorites.some(f => String(f.id) === String(film.id));
-    if (dejaPresent) {
-        return res.json({ message: "Already in favorites" });
-    }
+    // Vérifie que ce film n'est pas déjà dans les favoris DE CET utilisateur
+    const dejaPresent = favorites.some(
+        f => String(f.filmId) === String(film.id) && f.profileId === profileId
+    );
+    if (dejaPresent) return res.json({ message: "Already in favorites" });
 
-    // Ajoute le film
-    favorites.push(film);
-    fs.writeFileSync(filePath, JSON.stringify(favorites, null, 2));
+    // Ajoute avec l'id utilisateur
+    favorites.push({
+        profileId,
+        filmId: film.id,
+        titre: film.titre,
+        poster: film.poster,
+        type: film.type || 'movie'
+    });
+
+    writeJSON(filePath, favorites);
     res.json({ message: "Movie added to favorites ✓" });
 };
 
-// Récupére les favoris
+// Récupère les favoris DE CET utilisateur uniquement
 exports.getFavorites = (req, res) => {
+    const profileId = req.session.profile.id;
+    const favorites = readJSON(filePath);
 
-    // Renvoie la liste des favoris
-    const favorites = JSON.parse(fs.readFileSync(filePath));
-    res.json(favorites);
+    // Filtre par userId et reformate pour le frontend
+    const userFavorites = favorites
+        .filter(f => f.profileId === profileId)
+        .map(f => ({
+            id: f.filmId,
+            titre: f.titre,
+            poster: f.poster,
+            type: f.type || 'movie'
+        }));
+
+    res.json(userFavorites);
 };
 
-// Supprimer un favoris
+// Supprime un favori DE CET utilisateur uniquement
 exports.removeFavorite = (req, res) => {
-    const id = req.params.id;
-    let favorites = JSON.parse(fs.readFileSync(filePath));
+    const profileId = req.session.profile.id;
+    const filmId = req.params.id;
+    let favorites = readJSON(filePath);
 
-    // Garde tous les films sauf celui qui à été supprimer
-    favorites = favorites.filter(film => String(film.id) !== String(id));
-    fs.writeFileSync(filePath, JSON.stringify(favorites, null, 2));
+    // Supprime uniquement le favori qui appartient à cet utilisateur
+    favorites = favorites.filter(
+        f => !(String(f.filmId) === String(filmId) && f.profileId === profileId)
+    );
+
+    writeJSON(filePath, favorites);
     res.json({ message: "Film removed from favorites ✓" });
 };
